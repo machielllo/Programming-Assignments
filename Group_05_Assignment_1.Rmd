@@ -1,0 +1,291 @@
+---
+title: "Assignment 1: Group 5"
+author: 
+- "Machiel Kroon, s4426223"
+- "Martine van Wettum, sXXXXXXX"
+date: "01 - 02 - 2019"
+output:
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+
+# These are the global parameters.
+knitr::opts_chunk$set(echo = TRUE,   # Show the code in the  file
+                      eval = TRUE)   # Execute the code
+
+```                                              
+
+## Exercise 1
+
+ a) Construct a vector `z1` with elements 1, 1, 2, 3, 5, 8, 13, 21.
+```{r}
+z1 <- c(1, 1, 2, 3, 5, 8, 13, 21)           
+```
+
+ b) Return the length of this vector (the number of elements in the vector).
+```{r}
+length(z1)
+```
+
+ c) Construct a vector `z2` with elements (1, 2, 3, . . . , 1000)
+```{r}
+z2 <- 1:1000
+```
+
+ d) Construct a vector `z3` with elements (0, 5, 10, . . . , 5000). 
+ ```{r}
+ z3 <- seq(0, 5000, by = 5)
+ ```
+ 
+ e) Construct a vector `z4` with elements (1, 1, 1, 1, 2, 2, 2, 2, . . . , 50, 50, 50, 50)
+```{r}
+z4 <- rep(1:50, each = 4)
+```
+
+ f) Construct a vector `z5` with elements (1, 2, 2, 3, 3, 3, . . . , 10, . . . , 10)
+```{r}
+z5 <- rep(1:10, times = 1:10)
+```
+
+ g) Construct a vector `z6` with elements (3, 4, 4, 5, 6, 6, 7, 8, 8, . . . , 50, 50)
+```{r}
+multiplier <- rep(c(1,2), times = 24)
+z6 <- rep(3:50, times = multiplier)
+```
+ \textbf{elucidation} "each" is used for multiplying all elements in the vector by an integer, giving an 
+integer for the times argument would repeat the entire vector. Giving a vector 
+for the times argument, will repeat each number in the first by the corresponding
+entry of the second vector. The vector for the times argument is not recycled,
+thus needs to be of the same length.
+ 
+ h) Use `z6` to create a boolean vector `z7` with elements equal to TRUE if the value of the element is larger than 14, and FALSE if the value of the element is smaller than or equal to 14.
+```{r}
+z7 <- z6[z6>14]
+```
+ i) In mathematics, vectors can be added only if they have the same length (dimension). Is that also true in R? Give a general rule.
+What about subtraction, multiplication and division?
+What about adding a value to a vector: `z8 <- z1 + 1`? What about matrix multiplication of two
+vectors?
+
+In general if two vectors do not have the same length the shorter one will be recycled: if the shorter vector has n elements, the first element will be added to the n+1'th element of the longer vector, the second to the n+2'th element, etc.
+
+When adding a single value to a vector, it will be treated the same as adding two vectors, and the single value will be recycled to be added to every element in the vector.
+Multiplication and division of vectors goes element-wise and uses the same recycling method. So it is not like vector multiplication we know from mathematics.
+Adding a value to a vector will result in adding that value to each entry of the vector.
+Matrix multiplication of vectors only works if they have the same length, and returns the inner product. So mathematically it is the matrix multiplication where one of the vectors is transposed. 
+
+## Exercise 2
+
+ a) Printing 1:2 and c(1,2) gives the same output. What’s the difference? What about 5 and 5L?
+
+R categorizes data into different types, resulting in different types of vectors, in this case numerical or integer values. 5L forces R to work with an integer type.
+
+ b) Give an example of each of the 4 common types of atomic vectors in R: `boolean/logical`, `integer`,
+`numeric/double` and `character`.
+
+```{r}
+boolean <- c(T,T,F,F)
+integer <- 1:4
+numeric <- c(1, 2, 3, 4)
+character <- c("one", "two", "three", "four")
+```
+ c) If you combine two vectors with different types, what is the type of the resulting vector? Find a general rule that covers all four of the common types. Explain why this rule makes sense.
+
+The resulting vector will be of the highest order. From high to low: character, numeric, integer, boolean. This makes sense because we can express each type into another type of a higher magnitude, but not to a lower magnitude. (Of course we can express everything binary, but that wouldn't be useful to work with.)
+
+ d) Consider the list `list(1, list(2, list(3, 4)))`. How many elements does this list have? Why?
+ 
+The list has 2 elements, because a list can contain different data types, even lists itself. Here the first element is a numeric entry, and the second element is another list.
+ 
+e) Consider the list x.
+```{r}
+x <- list(1:3, list("a"), list(c(TRUE, FALSE, TRUE), c(2.3, 5.9)))
+```
+Describe its structure using `str()`, which provides more information than `typeof()`. Use `unlist()` on `x` and describe its resulting structure. What did unlist do? How many elements does `x` have? And after unlisting?
+
+```{r}
+str(x)
+str(unlist(x))
+length(unlist(x))
+```
+`x` consists of 3 entries, the first of which is a integer vector with entries 1, 2, 3.
+The second is list, with one entry, a character "a".
+The last is also a list, containing two entries, one boolean vector and one numerical vector with a length of three and two respectively.
+The `unlist` function produces a vector with the atomic elements. Sort of like removing all the subfolders and putting all files in one big folder.
+The resulting vector is of the character type and contains nine elements, instead of three.
+
+## Exercise 3
+ a) Pick a seed and generate 10 values from a continuous standard uniform distribution.
+```{r}
+ set.seed(150344)
+ rnorm(10, 0, 1)
+```
+ 
+ b) Find a seed that produces two zeros from a Poisson distribution with parameter 1.6.
+```{r}
+set.seed(16556726)
+rpois(2, 1.6)
+```
+
+ c) Construct a vector `y1` containing 1000 draws from a Poisson distribution with parameter 2.2. What are the sum and mean of `y1`?
+```{r}
+y1 <- rpois(1000, 2.2)
+sum(y1)
+mean(y1)
+```
+
+d) Draw 20 letters with equal probability with replacement from the built-in R vector `letters` and sort them counter-alphabetically.
+
+```{r}
+set.seed(150344)
+twenty <- sample(letters, 20, replace = TRUE)
+ordered.twenty <- sort(twenty, decreasing = TRUE)
+```
+
+## Exercise 4
+Start by constructing a vector x1 containing 20 random elements drawn from a uniform distribution with parameters 1 and 10.
+
+```{r}
+set.seed(150344)
+x1 <- runif(20, 1, 10)
+```
+
+ a) Return elements 10 to 15 of x1 in two ways: using a boolean and integer vector. Which method is more convenient? 
+ 
+```{r}
+x1[c(rep(F, 9), c(rep(T, 6)), c(rep(F, 5)))]
+x1[10:15]
+```
+Retrieving the values using an integer vector is faster to type, thus more convenient.
+
+ b) Return the odd elements of x1 in two ways: using a boolean and integer vector. Which method is more
+convenient?
+```{r}
+b.vector <- c((x1 %% 2) >= 1) 
+x1[b.vector]
+# NEATER MAYBE:  c((as.integer(x1) %% 2) == 1)
+#I'm checking the first number, how do I check the last?
+#b.vector.2 <- c((x1 * 10^6 %% 2 == 0)
+#nope more decimals than that.. and even then 
+#uniform draws have different number of integers.
+
+i.vector <- which(b.vector, TRUE) # i know i know
+x1[i.vector] 
+```
+Boolean is more convenient, as we have to check a statement.
+
+ c) Return the elements of x1 that are larger than 5 using a boolean and integer vector. Which method is
+more convenient?
+
+```{r}
+x1[x1>5]
+i.vector.2 <- c(which(x1>5, TRUE))
+x1[i.vector.2]
+```
+Again the boolean method is easier.
+
+## Exercise 5
+
+ a)
+```{r}
+set.seed(2038404)
+n1 <- rpois(1, 50)
+n2 <- n1 + 50
+grades <- runif(n2, 1, 10)
+round(grades, 1)
+```
+
+ b)
+```{r}
+passed <- grades[grades >= 5.5]
+length(passed) #number of passed students
+mean(passed)  #average of passed students
+```
+
+ c)
+```{r}
+boolean.index <- c(grades < 5.5)
+student.numbers <- setdiff(1:n2, which(boolean.index))
+max(student.numbers)
+```
+ 
+ d)
+```{r}
+which.min(grades)
+min(grades)
+```
+
+ e)
+```{r}
+aux1 <- 0
+top.ten <- NULL
+grades2 <- grades
+repeat {
+   aux1 <- aux1 + 1
+   top.ten <- append(top.ten, which(grades == max(grades2)))
+   grades2 <- grades2[grades2 != max(grades2)]
+   if (aux1 == 10) {
+      break
+   }
+}
+
+aux2 <- 0
+bot.ten <- NULL
+grades3 <- grades
+repeat {
+   aux2 <- aux2 + 1
+   bot.ten <- append(bot.ten, which(grades == min(grades3)))
+   grades3 <- grades3[grades3 != min(grades3)]
+   if (aux2 == 10) {
+      break
+   }
+}
+top.bot <- c(top.ten, bot.ten); top.bot
+grades[top.bot]
+```
+
+## Exercise 6
+ a) Construct a vector with 100 values drawn from a Poisson distribution with parameter $\lambda = 2.2$. Then restructure these values into a 10 x 10 matrix A.
+
+```{r}
+set.seed(11031936)
+big.draw <- rpois(100, 2.2)
+big.draw
+A <- matrix(big.draw, nrow = 10)
+```
+
+ b) Compute the inverse of the matrix $A^TA$, where $A^T$ is the transpose of A
+```{r}
+A1 <- (t(A) %*% A)
+I <- diag(10)
+inv.A1 <- solve(A1, I)
+```
+ 
+ c) Construct a matrix $B$ by adding to $A$ a row with the numbers $1, 2, \dots , 10$. This row should be the first row of the matrix. Then construct a matrix $C$ by adding to $B$ a row with the numbers $10, 9, \dots , 1$. This row should become the last row of the matrix
+```{r}
+B <- rbind(1:10, A)
+C <- rbind(B, 10:1)
+```
+
+ d) Construct a matrix $D$ by adding to $C$ a column containing the numbers $1, 2, \dots , 12$. This column should become the first column of the matrix. Then construct a matrix $E$ by adding a column with the numbers $2, 4, \dots , 24$. This column should become the last column of the matrix.
+```{r}
+D <- cbind(1:12, C)
+E <- cbind(D, seq(2, 24, by = 2))
+```
+
+ e) Construct a vector with all elements of $E$ that are larger than 1.
+```{r}
+big.values <- E[E > 1]
+```
+ f) Compute the 12 × 12-matrix \textbf(ab), where \textbf(a) stands for the first column of the matrix $E$ and \textbf(b) for the first row of $E$.
+ 
+ g) Compute the number of elements in the matrix \textbf(ab) that are smaller than 3.
+ 
+ 
+ h) Use a single built-in function to find the sums of each column of $E$. Do the same for all rows.
+ 
+ 
+ i) Use a built-in function to return the diagonal elements of $E$.
+
+
