@@ -162,16 +162,16 @@ Retrieving the values using an integer vector is faster to type, thus more conve
  b) Return the odd elements of x1 in two ways: using a boolean and integer vector. Which method is more
 convenient?
 ```{r}
-b.vector <- c((x1 %% 2) >= 1) 
-x1[b.vector]
+boolean_vector <- c((x1 %% 2) >= 1) 
+x1[boolean_vector]
 # NEATER MAYBE:  c((as.integer(x1) %% 2) == 1)
 #I'm checking the first number, how do I check the last?
 #b.vector.2 <- c((x1 * 10^6 %% 2 == 0)
 #nope more decimals than that.. and even then 
 #uniform draws have different number of integers.
 
-i.vector <- which(b.vector, TRUE) # i know i know
-x1[i.vector] 
+integer_vector <- which(boolean_vector, TRUE)
+x1[integer_vector] 
 ```
 Boolean is more convenient, as we have to check a statement.
 
@@ -180,8 +180,8 @@ more convenient?
 
 ```{r}
 x1[x1>5]
-i.vector.2 <- c(which(x1>5, TRUE))
-x1[i.vector.2]
+integer_vector2 <- c(which(x1>5, TRUE))
+x1[integer_vector2]
 ```
 Again the boolean method is easier.
 
@@ -205,25 +205,25 @@ mean(passed)  #average of passed students
 
  c)
 ```{r}
-boolean.index <- c(grades < 5.5)
-student.numbers <- setdiff(1:n2, which(boolean.index))
-max(student.numbers)
+boolean_index <- c(grades < 5.5)
+student_numbers <- setdiff(1:n2, which(boolean_index))
+max(student_numbers)
 ```
  
  d)
 ```{r}
-which.min(grades)
+which_min(grades)
 min(grades)
 ```
 
  e)
 ```{r}
 aux1 <- 0
-top.ten <- NULL
+top_ten <- NULL
 grades2 <- grades
 repeat {
    aux1 <- aux1 + 1
-   top.ten <- append(top.ten, which(grades == max(grades2)))
+   top_ten <- append(top_ten, which(grades == max(grades2)))
    grades2 <- grades2[grades2 != max(grades2)]
    if (aux1 == 10) {
       break
@@ -231,18 +231,18 @@ repeat {
 }
 
 aux2 <- 0
-bot.ten <- NULL
+bot_ten <- NULL
 grades3 <- grades
 repeat {
    aux2 <- aux2 + 1
-   bot.ten <- append(bot.ten, which(grades == min(grades3)))
+   bot_ten <- append(bot_ten, which(grades == min(grades3)))
    grades3 <- grades3[grades3 != min(grades3)]
    if (aux2 == 10) {
       break
    }
 }
-top.bot <- c(top.ten, bot.ten); top.bot
-grades[top.bot]
+top_bot <- c(top_ten, bot_ten); top_bot
+grades[top_bot]
 ```
 
 ## Exercise 6
@@ -250,16 +250,16 @@ grades[top.bot]
 
 ```{r}
 set.seed(11031936)
-big.draw <- rpois(100, 2.2)
-big.draw
-A <- matrix(big.draw, nrow = 10)
+big_draw <- rpois(100, 2.2)
+big_draw
+A <- matrix(big_draw, nrow = 10)
 ```
 
  b) Compute the inverse of the matrix $A^TA$, where $A^T$ is the transpose of A
 ```{r}
 A1 <- (t(A) %*% A)
 I <- diag(10)
-inv.A1 <- solve(A1, I)
+inv_A1 <- solve(A1, I)
 ```
  
  c) Construct a matrix $B$ by adding to $A$ a row with the numbers $1, 2, \dots , 10$. This row should be the first row of the matrix. Then construct a matrix $C$ by adding to $B$ a row with the numbers $10, 9, \dots , 1$. This row should become the last row of the matrix
@@ -276,7 +276,7 @@ E <- cbind(D, seq(2, 24, by = 2))
 
  e) Construct a vector with all elements of $E$ that are larger than 1.
 ```{r}
-big.values <- E[E > 1]
+big_values <- E[E > 1]
 ```
  f) Compute the 12 × 12-matrix \textbf(ab), where \textbf(a) stands for the first column of the matrix $E$ and \textbf(b) for the first row of $E$.
  
